@@ -2,23 +2,46 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-int encontrarMayor(int cuadrado[1024][1024], int lados)
+int consMagica2(int lados, int cuadrado[1024][1024], int constanteUno)
 {
-    int columnas, filas, mayor;
-    columnas = filas = 0;
-    for( columnas = 0; columnas < lados; columnas++)
-    {
-        for( filas = 0; filas < lados; filas++)
+    int filas, columnas, constanteMagicaOriginal;
+    int sumaEsquinas, sumaCentros, centro; 
+    constanteMagicaOriginal = (4*constanteUno)/lados;
+    sumaEsquinas = cuadrado[0][0] + cuadrado[0][lados-1] + cuadrado[lados-1][lados-1] + cuadrado[lados-1][0];
+    if((lados % 2) == 0)
+    {    
+        sumaCentros = cuadrado[0][lados/2] + cuadrado[0][(lados/2)-1] + cuadrado[lados-1][lados/2] + cuadrado[lados-1][(lados/2)-1] + cuadrado[lados/2][0] + cuadrado[(lados/2)-1][lados-1] + cuadrado[lados/2][lados-1] + cuadrado[(lados/2)-1][0];
+        sumaCentros = sumaCentros/2;
+        centro = cuadrado[lados/2][lados/2] + cuadrado[(lados/2)-1][lados/2] + cuadrado[(lados/2)-1][(lados/2)-1] + cuadrado[lados/2][(lados/2)-1];
+    }else
         {
-          if(filas=columnas=0)
-            mayor = cuadrado[columnas][filas];
-           else
-            if(mayor < cuadrado[columnas][filas])
-                mayor = cuadrado[columnas][filas];
+           sumaCentros = cuadrado[0][lados/2] + cuadrado[lados-1][lados/2] + cuadrado[lados/2][0] + cuadrado[lados/2][lados-1];
+           centro = 4*cuadrado[(lados/2)][lados/2];
+        }
+    return (sumaCentros == sumaEsquinas && sumaCentros == constanteMagicaOriginal && constanteMagicaOriginal == centro) ? 1 : 0;
+}
+int cifrasIgualCasillas(int lados, int cuadrado[1024][1024])
+{
+    int i, filas, columnas,j;
+    int existe = 0;
+    for( i = 0; i < lados*lados; i++ )
+    {
+        j = i+1;
+        for(columnas = 0; columnas < lados; columnas++)
+        {
+            for(filas = 0; filas < lados; filas++)
+            {
+                if(j==cuadrado[columnas][filas])
+                {
+                    existe++;
+                    columnas = filas = 1024;
+                }
+            }
         }
     }
-    return mayor; 
+    return (existe==lados*lados) ? 1 : 0;
 }
+
 int comprobarMagico(int lados, int resultados[2][1025])
 {
     int i, bandera, j;
@@ -46,12 +69,8 @@ void mostrarCuadrado(int lados, int cuadrado[1024][1024], int resultados[2][1025
         {
           printf("%4i", cuadrado[columnas][filas]);
         }
-        printf("= %i", resultados[0][columnas]);
         printf("\n");
     }
-
-    for( columnas = 0; columnas < lados; columnas++)
-            printf("%4i", resultados[1][columnas]);
 }
 
 void calcularMagico(int lados, int cuadrado[1024][1024], int resultados[2][1025])
@@ -117,13 +136,21 @@ int main()
     while (continuar)
     {
        scanf("%i", &n);
-       !n ? continuar=0 : continuar;
+       n==0 ? continuar=0 : continuar;
        rellenarCuadrado(n, cuadrado);
        calcularMagico(n,cuadrado, resultados);
-       mostrarCuadrado(n, cuadrado, resultados);
-       //printf("\n%i", encontrarMayor(cuadrado, n));       
+       //mostrarCuadrado(n, cuadrado, resultados); //consMagica2 devuelve 1, comprobarMagico  devuelve 1, 
+       if(comprobarMagico(n,resultados))
+       {
+            if(cifrasIgualCasillas(n,cuadrado))
+                printf("\n%s\n",consMagica2(n,cuadrado,resultados[0][0])?"ESOTERICO":"");
+            else
+            {
+                printf("\nDIABOLICO\n");
+            }
+       }else
+            printf("\nNO\n");
     }
-
     return 0;
 //4
 //16 3 2 13 5 10 11 8 9 6 7 12 4 15 14 1 
