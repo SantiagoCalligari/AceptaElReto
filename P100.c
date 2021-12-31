@@ -50,7 +50,7 @@ void descomponer(char input[], int NumeroDescompuesto[])
     }
 }
 
-void itoa(long i, char *string)
+void itoaa(long i, char *string)
 {
 	int power = 0, j = 0;
  
@@ -85,7 +85,7 @@ int krepreakar(int input[], int ciclos)
        {
            desc = descOrd(input);
            asc = ascOrd(input);
-           itoa(desc-asc, tostr);
+           itoaa(desc-asc, tostr);
            descomponer(tostr, iteracion);
            ciclos = ciclos + 1;
            krepreakar(iteracion, ciclos);

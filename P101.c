@@ -4,7 +4,7 @@
 #include <stdlib.h>
 int consMagica2(int lados, int cuadrado[1024][1024], int constanteUno)
 {
-    int filas, columnas, constanteMagicaOriginal;
+    int constanteMagicaOriginal;
     int sumaEsquinas, sumaCentros, centro; 
     constanteMagicaOriginal = (4*constanteUno)/lados;
     sumaEsquinas = cuadrado[0][0] + cuadrado[0][lados-1] + cuadrado[lados-1][lados-1] + cuadrado[lados-1][0];
@@ -20,6 +20,7 @@ int consMagica2(int lados, int cuadrado[1024][1024], int constanteUno)
         }
     return (sumaCentros == sumaEsquinas && sumaCentros == constanteMagicaOriginal && constanteMagicaOriginal == centro) ? 1 : 0;
 }
+
 int cifrasIgualCasillas(int lados, int cuadrado[1024][1024])
 {
     int i, filas, columnas,j;
@@ -59,7 +60,7 @@ int comprobarMagico(int lados, int resultados[2][1025])
     return bandera;
 }
 
-void mostrarCuadrado(int lados, int cuadrado[1024][1024], int resultados[2][1025])
+void mostrarCuadrado(int lados, int cuadrado[1024][1024])
 {
     int columnas, filas;
     printf("\n");
@@ -75,7 +76,7 @@ void mostrarCuadrado(int lados, int cuadrado[1024][1024], int resultados[2][1025
 
 void calcularMagico(int lados, int cuadrado[1024][1024], int resultados[2][1025])
 {
-    int columnas, filas, suma, diag1, i, bandera = 0;
+    int columnas, filas, suma, i;
     
     
     //suma de las filas y las columnas, se guardan en su lugar.
@@ -131,25 +132,23 @@ void rellenarCuadrado(int lados, int cuadrado[1024][1024])
 
 int main()
 {
-    int cuadrado[1024][1024], resultados[2][1025], continuar, n;
+    int continuar, n, magicidad[3];
     continuar = 1;
+    printf("por lo menos compilo");
     while (continuar)
     {
-       scanf("%i", &n);
-       n==0 ? continuar=0 : continuar;
+       printf("eeee, cantidad de lados");
+       scanf("%d", &n);
+       n==0 ? continuar = 0: continuar;
+       int cuadrado[n][n];
+       int resultados[2][n];
        rellenarCuadrado(n, cuadrado);
        calcularMagico(n,cuadrado, resultados);
-       //mostrarCuadrado(n, cuadrado, resultados); //consMagica2 devuelve 1, comprobarMagico  devuelve 1, 
-       if(comprobarMagico(n,resultados))
-       {
-            if(cifrasIgualCasillas(n,cuadrado))
-                printf("\n%s\n",consMagica2(n,cuadrado,resultados[0][0])?"ESOTERICO":"");
-            else
-            {
-                printf("\nDIABOLICO\n");
-            }
-       }else
-            printf("\nNO\n");
+       //mostrarCuadrado(n, cuadrado);
+       /*magicidad[0] = comprobarMagico(n, resultados);
+       magicidad[1] = cifrasIgualCasillas(n,cuadrado);
+       magicidad[2] = consMagica2(n,cuadrado,resultados[0][0]);
+*/
     }
     return 0;
 //4
