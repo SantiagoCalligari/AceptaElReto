@@ -9,21 +9,38 @@ typedef struct _SNodo {
 } SNodo;
 void liberar(SNodo* cuadrado, int lados)
 {
-  SNodo* der, *temp2, *abajo;
-  int i;
-  abajo = der = cuadrado;
-  while(abajo != NULL)
+  SNodo *temp, *sigLinea;
+  temp = sigLinea = cuadrado;
+  while(cuadrado->der!=NULL || cuadrado->abajo!=NULL)
   {
-    temp2 = abajo;
-    while(temp2!=NULL)
+    SNodo *antecesor = temp;
+    for(int j=0; temp->abajo!=NULL;j++)
     {
-      der = temp2;
-      temp2=temp2->der;
+      if (j!=0) antecesor = antecesor->abajo;
+      temp = temp->abajo;
     }
-    free(temp2);
-    abajo = abajo->abajo;
+    if(temp==antecesor) antecesor = &cuadrado;
+      while(temp->der!=NULL)
+      {
+        SNodo *aux = temp;
+        SNodo* pred = temp;
+        for(int i=0;temp->der!=NULL;i++)
+        { 
+          if(i!=0) pred = pred->der;
+          temp = temp->der; 
+        }
+        pred->der=NULL;
+        free(temp);
+        temp = aux;
+      }
+      antecesor->abajo = NULL;
+      if(cuadrado->abajo != NULL)
+        free(temp);
+      temp = cuadrado;
   }
+  free(cuadrado);
 }
+
 void MostrarCuadrado(SNodo* cuadrado)
 {
   SNodo* temp, *temp2;
